@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>bropay — Авторизация</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #000000; color: #ffffff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        body { font-family: Arial, sans-serif; background-color: #000000; color: #ffffff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; padding-bottom: 70px; box-sizing: border-box; }
         .box { background: #111111; padding: 40px; border-radius: 0px; border: 1px solid #ffffff; width: 100%; max-width: 360px; box-shadow: 0 0 20px rgba(255,255,255,0.05); }
         h2 { text-align: center; font-size: 28px; font-weight: bold; letter-spacing: 2px; margin-top: 0; margin-bottom: 30px; text-transform: uppercase; }
         label { display: block; margin: 15px 0 5px; color: #aaaaaa; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
@@ -15,36 +15,32 @@
         .btn:hover { background: #cccccc; }
         .toggle-link { text-align: center; margin-top: 20px; color: #aaaaaa; font-size: 13px; cursor: pointer; text-decoration: underline; }
         .toggle-link:hover { color: #ffffff; }
+
+        /* СТИЛЬ НИЖНЕГО ПАНЕЛИ PLAYEROK */
+        .nav-bar { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: #111111; border-top: 1px solid #333333; display: flex; justify-content: space-around; padding: 12px 0; z-index: 100; }
+        .nav-item { color: #aaaaaa; text-align: center; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; text-decoration: none; flex: 1; font-weight: bold; }
+        .nav-item.active { color: #ffffff; }
+        .nav-icon { font-size: 20px; display: block; margin-bottom: 4px; }
+
+        /* КОНТЕНТ ДЛЯ ЭКРАНОВ МЕНЮ */
+        .menu-page { display: none; text-align: center; width: 100%; max-width: 500px; padding: 20px; }
+        .menu-page h1 { font-size: 26px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
+        .placeholder-box { border: 1px dashed #333333; padding: 40px 20px; color: #666666; font-size: 14px; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
-    <!-- ОКНО 1: ФОРМА АВТОРИЗАЦИИ (РЕГИСТРАЦИЯ / ВХОД) -->
+    <!-- ОКНО 1: ФОРМА АВТОРИЗАЦИИ -->
     <div class="box" id="auth-screen">
         <h2 id="form-title">Регистрация</h2>
-        
-        <div id="username-block">
-            <label>Username</label>
-            <input type="text" id="username" placeholder="Введите никнейм">
-        </div>
-        
+        <div id="username-block"><label>Username</label><input type="text" id="username" placeholder="Введите никнейм"></div>
         <div id="role-block">
             <label>Для чего аккаунт?</label>
-            <select id="role">
-                <option value="Для покупок">Для покупок</option>
-                <option value="Для продаж">Для продаж</option>
-            </select>
+            <select id="role"><option value="Для покупок">Для покупок</option><option value="Для продаж">Для продаж</option></select>
         </div>
-
-        <label>Ваша почта</label>
-        <input type="email" id="email" placeholder="example@mail.ru">
-
-        <label>Пароль</label>
-        <input type="password" id="password" placeholder="••••••••">
-
+        <label>Ваша почта</label><input type="email" id="email" placeholder="example@mail.ru">
+        <label>Пароль</label><input type="password" id="password" placeholder="••••••••">
         <button class="btn" id="main-btn" onclick="submitAuth()">Готово</button>
-        
-        <!-- Интерактивная ссылка внизу -->
         <div class="toggle-link" id="toggle-auth" onclick="toggleFormMode()">Есть аккаунт? Войти!</div>
     </div>
 
@@ -56,31 +52,59 @@
         <button class="btn" onclick="checkDigitCode()">Подтвердить</button>
     </div>
 
-    <!-- ОКНО 3: ГЛАВНОЕ МЕНЮ (ЕСЛИ ЗАШЕЛ) -->
-    <div class="box" id="menu-screen" style="display: none; text-align: center;">
-        <h2>bropay</h2>
-        <p style="font-size: 18px; margin-bottom: 5px;">Привет, <b id="user-name"></b>!</p>
-        <p style="color: #aaa; font-size: 14px; margin-bottom: 25px;">Ваш аккаунт: <span id="user-role" style="color: #fff; font-weight: bold;"></span></p>
-        <button class="btn" style="background: #ff3333; color: #fff;" onclick="logOut()">Выйти из аккаунта</button>
+    <!-- ГЛАВНОЕ МЕНЮ В СТИЛЕ PLAYEROK (ЭКРАНЫ СТРАНИЦ) -->
+    <div class="menu-page" id="page-search">
+        <h1>Поиск</h1>
+        <input type="text" placeholder="Поиск игр и товаров..." style="margin-bottom: 20px;">
+        <div class="placeholder-box">Здесь будет глобальный поиск по биржам bropay</div>
+    </div>
+
+    <div class="menu-page" id="page-market">
+        <h1>Маркет</h1>
+        <div class="placeholder-box">Тут будут категории игр и разделы для торговли</div>
+    </div>
+
+    <div class="menu-page" id="page-sell">
+        <h1>Продать</h1>
+        <div class="placeholder-box">Панель создания нового лота для продажи ценностей</div>
+    </div>
+
+    <div class="menu-page" id="page-chats">
+        <h1>Чаты</h1>
+        <div class="placeholder-box">Список ваших активных диалогов с покупателями/продавцами</div>
+    </div>
+
+    <div class="menu-page" id="page-profile">
+        <h1>Профиль</h1>
+        <div class="box" style="margin: 0 auto; text-align: left;">
+            <p style="font-size: 18px; margin-bottom: 5px;">Ник: <b id="user-name"></b></p>
+            <p style="color: #aaa; font-size: 14px; margin-bottom: 25px;">Аккаунт: <span id="user-role" style="color: #fff; font-weight: bold;"></span></p>
+            <button class="btn" style="background: #ff3333; color: #fff; margin-top: 0;" onclick="logOut()">Выйти из аккаунта</button>
+        </div>
+    </div>
+
+    <!-- НИЖНИЙ НАВ-БАР (КНОПКИ PLAYEROK) -->
+    <div class="nav-bar" id="playerok-nav" style="display: none;">
+        <div class="nav-item active" id="btn-search" onclick="changeTab('search')"><span class="nav-icon">🔍</span>Поиск</div>
+        <div class="nav-item" id="btn-market" onclick="changeTab('market')"><span class="nav-icon">🛒</span>Маркет</div>
+        <div class="nav-item" id="btn-sell" onclick="changeTab('sell')"><span class="nav-icon">➕</span>Продать</div>
+        <div class="nav-item" id="btn-chats" onclick="changeTab('chats')"><span class="nav-icon">💬</span>Чаты</div>
+        <div class="nav-item" id="btn-profile" onclick="changeTab('profile')"><span class="nav-icon">👤</span>Профиль</div>
     </div>
 
 <script>
-    let isRegisterMode = true; // Переменная режима: true — регистрация, false — вход
+    let isRegisterMode = true;
 
-    // Проверка сохраненного входа
     window.onload = function() {
         const savedUser = localStorage.getItem('bropay_active_user');
         const savedRole = localStorage.getItem('bropay_active_role');
-        
         if (savedUser && savedRole) {
-            openMenu(savedUser, savedRole);
+            loginSuccess(savedUser, savedRole);
         }
     };
 
-    // Переключение между Входом и Регистрацией
     function toggleFormMode() {
         isRegisterMode = !isRegisterMode;
-        
         const formTitle = document.getElementById('form-title');
         const usernameBlock = document.getElementById('username-block');
         const roleBlock = document.getElementById('role-block');
@@ -93,96 +117,70 @@
             toggleLink.innerText = "Есть аккаунт? Войти!";
         } else {
             formTitle.innerText = "Вход";
-            usernameBlock.style.display = "none"; // Скрываем Username при входе
-            roleBlock.style.display = "none";     // Скрываем выбор роли при входе
+            usernameBlock.style.display = "none";
+            roleBlock.style.display = "none";
             toggleLink.innerText = "Нет аккаунта? Зарегистрируйся!";
         }
     }
 
-    // Обработка нажатия кнопки "Готово"
     function submitAuth() {
         const email = document.getElementById('email').value.trim();
         const pass = document.getElementById('password').value;
 
         if (isRegisterMode) {
-            // ЛОГИКА РЕГИСТРАЦИИ
             const user = document.getElementById('username').value.trim();
             const role = document.getElementById('role').value;
-
-            if (!user || !email || !pass) {
-                alert('Заполни все поля для регистрации!');
-                return;
-            }
+            if (!user || !email || !pass) { alert('Заполни все поля!'); return; }
 
             localStorage.setItem('temp_user', user);
             localStorage.setItem('temp_role', role);
-            localStorage.setItem('saved_pass_' + email, pass); // Запоминаем пароль для этой почты
-            localStorage.setItem('saved_user_' + email, user); // Запоминаем ник для этой почты
-            localStorage.setItem('saved_role_' + email, role); // Запоминаем роль для этой почты
+            localStorage.setItem('saved_pass_' + email, pass);
+            localStorage.setItem('saved_user_' + email, user);
+            localStorage.setItem('saved_role_' + email, role);
 
             document.getElementById('show-email').innerText = email;
-            showScreen('code-screen');
-            alert('Код подтверждения отправлен! (Для теста введи код: 111222)');
+            hideAll();
+            document.getElementById('code-screen').style.display = 'block';
+            alert('Код: 111222');
         } else {
-            // ЛОГИКА ВХОДА
-            if (!email || !pass) {
-                alert('Введите почту и пароль!');
-                return;
-            }
-
+            if (!email || !pass) { alert('Введите данные!'); return; }
             const correctPass = localStorage.getItem('saved_pass_' + email);
             if (correctPass && correctPass === pass) {
                 const user = localStorage.getItem('saved_user_' + email);
                 const role = localStorage.getItem('saved_role_' + email);
-                
                 localStorage.setItem('bropay_active_user', user);
                 localStorage.setItem('bropay_active_role', role);
-                
-                openMenu(user, role);
-                alert('С возвращением в bropay!');
+                loginSuccess(user, role);
             } else {
-                alert('Неверная почта или пароль! Или такой аккаунт еще не зарегистрирован.');
+                alert('Неверные данные!');
             }
         }
     }
 
-    // Проверка 6-значного кода
     function checkDigitCode() {
-        const code = document.getElementById('digit-code').value.trim();
-
-        if (code === "111222") {
+        if (document.getElementById('digit-code').value.trim() === "111222") {
             const user = localStorage.getItem('temp_user');
             const role = localStorage.getItem('temp_role');
-
             localStorage.setItem('bropay_active_user', user);
             localStorage.setItem('bropay_active_role', role);
-
-            openMenu(user, role);
-            alert('Вход выполнен успешно!');
+            loginSuccess(user, role);
         } else {
-            alert('Неверный код! Введите 111222.');
+            alert('Неверный код!');
         }
     }
 
-    function openMenu(user, role) {
+    function loginSuccess(user, role) {
         document.getElementById('user-name').innerText = user;
         document.getElementById('user-role').innerText = role;
-        showScreen('menu-screen');
+        
+        hideAll();
+        document.getElementById('playerok-nav').style.style = 'flex'; // Показываем нижний бар
+        document.getElementById('playerok-nav').style.display = 'flex';
+        changeTab('profile'); // По умолчанию открываем вкладку профиля
     }
 
-    function logOut() {
-        localStorage.removeItem('bropay_active_user');
-        localStorage.removeItem('bropay_active_role');
-        showScreen('auth-screen');
-    }
-
-    function showScreen(screenId) {
-        document.getElementById('auth-screen').style.display = 'none';
-        document.getElementById('code-screen').style.display = 'none';
-        document.getElementById('menu-screen').style.display = 'none';
-        document.getElementById(screenId).style.display = 'block';
-    }
-</script>
-
-</body>
-</html>
+    function changeTab(tabName) {
+        // Прячем все вкладки меню
+        document.getElementById('page-search').style.display = 'none';
+        document.getElementById('page-market').style.display = 'none';
+        document.getElementById('page-sell').style.display = 'none';
