@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bropay — Биржа игровых ценностей</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #0c0c0e; color: #f1f1f4; margin: 0; padding: 0; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #131316; border-bottom: 1px solid #232329; }
+        .logo { font-size: 26px; font-weight: 800; color: #00ff88; letter-spacing: 1px; }
+        .btn { background: #00ff88; color: #050505; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 15px; transition: 0.2s; }
+        .btn:hover { background: #00cc6a; transform: translateY(-1px); }
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        h1 { font-size: 32px; font-weight: 700; margin-bottom: 10px; }
+        p.subtitle { color: #8a8a98; margin-bottom: 30px; font-size: 16px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        .card { background: #131316; border: 1px solid #232329; border-radius: 12px; padding: 24px; text-align: center; transition: 0.3s; }
+        .card:hover { border-color: #00ff88; box-shadow: 0 8px 24px rgba(0,255,136,0.1); }
+        .card h3 { margin: 0 0 10px 0; font-size: 20px; }
+        .tag { display: inline-block; background: #232329; color: #00ff88; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-bottom: 15px; }
+        .price { font-size: 24px; font-weight: 700; color: #ffffff; margin: 15px 0; }
+        .btn-buy { width: 100%; background: transparent; color: #00ff88; border: 2px solid #00ff88; }
+        .btn-buy:hover { background: #00ff88; color: #000; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">🟩 bropay</div>
+        <button class="btn" onclick="alert('Система регистрации бэкенда bropay находится в разработке (План создания: 2 года)!')">Войти / Регистрация</button>
+    </header>
+
+    <div class="container">
+        <h1>bropay — торговая площадка игровых ценностей</h1>
+        <p class="subtitle">Покупайте голду, робуксы, гемы и аккаунты напрямую у других игроков. Безопасно.</p>
+        
+        <div class="grid">
+            <div class="card">
+                <span class="tag">Roblox</span>
+                <h3>1 000 Робуксов</h3>
+                <p class="price">850 ₽</p>
+                <button class="btn btn-buy" onclick="alert('Покупка станет доступна после настройки платежного шлюза bropay')">Купить</button>
+            </div>
+
+            <div class="card">
+                <span class="tag">Standoff 2</span>
+                <h3>500 Голды</h3>
+                <p class="price">390 ₽</p>
+                <button class="btn btn-buy" onclick="alert('Покупка станет доступна после настройки платежного шлюза bropay')">Купить</button>
+            </div>
+
+            <div class="card">
+                <span class="tag">Brawl Stars</span>
+                <h3>80 Гемов (Донат)</h3>
+                <p class="price">220 ₽</p>
+                <button class="btn btn-buy" onclick="alert('Покупка станет доступна после настройки платежного шлюза bropay')">Купить</button>
+            </div>
+
+            <div class="card">
+                <span class="tag">Minecraft</span>
+                <h3>Лицензия (Аккаунт)</h3>
+                <p class="price">600 ₽</p>
+                <button class="btn btn-buy" onclick="alert('Покупка станет доступна после настройки платежного шлюза bropay')">Купить</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
