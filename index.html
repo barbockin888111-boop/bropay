@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>bropay — Вход</title>
+    <title>bropay — Авторизация</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #000000; color: #ffffff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .box { background: #111111; padding: 40px; border-radius: 0px; border: 1px solid #ffffff; width: 100%; max-width: 360px; box-shadow: 0 0 20px rgba(255,255,255,0.05); }
@@ -13,25 +13,28 @@
         input:focus, select:focus { border-color: #ffffff; outline: none; }
         .btn { width: 100%; padding: 14px; background: #ffffff; color: #000000; border: none; border-radius: 0px; font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 25px; text-transform: uppercase; letter-spacing: 1px; transition: 0.2s; }
         .btn:hover { background: #cccccc; }
-        .menu { display: none; text-align: center; }
-        .menu h1 { font-size: 32px; margin-bottom: 10px; }
-        .menu p { color: #aaaaaa; margin-bottom: 30px; }
+        .toggle-link { text-align: center; margin-top: 20px; color: #aaaaaa; font-size: 13px; cursor: pointer; text-decoration: underline; }
+        .toggle-link:hover { color: #ffffff; }
     </style>
 </head>
 <body>
 
-    <!-- ОКНО 1: ВХОД И РЕГИСТРАЦИЯ -->
+    <!-- ОКНО 1: ФОРМА АВТОРИЗАЦИИ (РЕГИСТРАЦИЯ / ВХОД) -->
     <div class="box" id="auth-screen">
-        <h2>bropay</h2>
+        <h2 id="form-title">Регистрация</h2>
         
-        <label>Username</label>
-        <input type="text" id="username" placeholder="Введите никнейм">
+        <div id="username-block">
+            <label>Username</label>
+            <input type="text" id="username" placeholder="Введите никнейм">
+        </div>
         
-        <label>Для чего аккаунт?</label>
-        <select id="role">
-            <option value="Для покупок">Для покупок</option>
-            <option value="Для продаж">Для продаж</option>
-        </select>
+        <div id="role-block">
+            <label>Для чего аккаунт?</label>
+            <select id="role">
+                <option value="Для покупок">Для покупок</option>
+                <option value="Для продаж">Для продаж</option>
+            </select>
+        </div>
 
         <label>Ваша почта</label>
         <input type="email" id="email" placeholder="example@mail.ru">
@@ -39,7 +42,10 @@
         <label>Пароль</label>
         <input type="password" id="password" placeholder="••••••••">
 
-        <button class="btn" onclick="goRegister()">Готово</button>
+        <button class="btn" id="main-btn" onclick="submitAuth()">Готово</button>
+        
+        <!-- Интерактивная ссылка внизу -->
+        <div class="toggle-link" id="toggle-auth" onclick="toggleFormMode()">Есть аккаунт? Войти!</div>
     </div>
 
     <!-- ОКНО 2: ПОДТВЕРЖДЕНИЕ КОДА -->
@@ -50,7 +56,7 @@
         <button class="btn" onclick="checkDigitCode()">Подтвердить</button>
     </div>
 
-    <!-- ОКНО 3: ГЛАВНОЕ МЕНЮ (ПОЯВЛЯЕТСЯ ЕСЛИ ЗАШЕЛ) -->
+    <!-- ОКНО 3: ГЛАВНОЕ МЕНЮ (ЕСЛИ ЗАШЕЛ) -->
     <div class="box" id="menu-screen" style="display: none; text-align: center;">
         <h2>bropay</h2>
         <p style="font-size: 18px; margin-bottom: 5px;">Привет, <b id="user-name"></b>!</p>
@@ -59,38 +65,85 @@
     </div>
 
 <script>
-    // ПРОВЕРКА: Если пользователь уже регистрировался раньше, сразу открываем Главное меню
+    let isRegisterMode = true; // Переменная режима: true — регистрация, false — вход
+
+    // Проверка сохраненного входа
     window.onload = function() {
         const savedUser = localStorage.getItem('bropay_active_user');
         const savedRole = localStorage.getItem('bropay_active_role');
         
         if (savedUser && savedRole) {
-            showScreen('menu-screen');
-            document.getElementById('user-name').innerText = savedUser;
-            document.getElementById('user-role').innerText = savedRole;
+            openMenu(savedUser, savedRole);
         }
     };
 
-    // Нажатие на кнопку "Готово"
-    function goRegister() {
-        const user = document.getElementById('username').value.trim();
+    // Переключение между Входом и Регистрацией
+    function toggleFormMode() {
+        isRegisterMode = !isRegisterMode;
+        
+        const formTitle = document.getElementById('form-title');
+        const usernameBlock = document.getElementById('username-block');
+        const roleBlock = document.getElementById('role-block');
+        const toggleLink = document.getElementById('toggle-auth');
+
+        if (isRegisterMode) {
+            formTitle.innerText = "Регистрация";
+            usernameBlock.style.display = "block";
+            roleBlock.style.display = "block";
+            toggleLink.innerText = "Есть аккаунт? Войти!";
+        } else {
+            formTitle.innerText = "Вход";
+            usernameBlock.style.display = "none"; // Скрываем Username при входе
+            roleBlock.style.display = "none";     // Скрываем выбор роли при входе
+            toggleLink.innerText = "Нет аккаунта? Зарегистрируйся!";
+        }
+    }
+
+    // Обработка нажатия кнопки "Готово"
+    function submitAuth() {
         const email = document.getElementById('email').value.trim();
         const pass = document.getElementById('password').value;
-        const role = document.getElementById('role').value;
 
-        if (!user || !email || !pass) {
-            alert('Заполните все поля!');
-            return;
+        if (isRegisterMode) {
+            // ЛОГИКА РЕГИСТРАЦИИ
+            const user = document.getElementById('username').value.trim();
+            const role = document.getElementById('role').value;
+
+            if (!user || !email || !pass) {
+                alert('Заполни все поля для регистрации!');
+                return;
+            }
+
+            localStorage.setItem('temp_user', user);
+            localStorage.setItem('temp_role', role);
+            localStorage.setItem('saved_pass_' + email, pass); // Запоминаем пароль для этой почты
+            localStorage.setItem('saved_user_' + email, user); // Запоминаем ник для этой почты
+            localStorage.setItem('saved_role_' + email, role); // Запоминаем роль для этой почты
+
+            document.getElementById('show-email').innerText = email;
+            showScreen('code-screen');
+            alert('Код подтверждения отправлен! (Для теста введи код: 111222)');
+        } else {
+            // ЛОГИКА ВХОДА
+            if (!email || !pass) {
+                alert('Введите почту и пароль!');
+                return;
+            }
+
+            const correctPass = localStorage.getItem('saved_pass_' + email);
+            if (correctPass && correctPass === pass) {
+                const user = localStorage.getItem('saved_user_' + email);
+                const role = localStorage.getItem('saved_role_' + email);
+                
+                localStorage.setItem('bropay_active_user', user);
+                localStorage.setItem('bropay_active_role', role);
+                
+                openMenu(user, role);
+                alert('С возвращением в bropay!');
+            } else {
+                alert('Неверная почта или пароль! Или такой аккаунт еще не зарегистрирован.');
+            }
         }
-
-        // Временно сохраняем данные в память, пока не введет правильный код
-        localStorage.setItem('temp_user', user);
-        localStorage.setItem('temp_role', role);
-
-        // Показываем экран ввода кода
-        document.getElementById('show-email').innerText = email;
-        showScreen('code-screen');
-        alert('Код подтверждения отправлен! (Для теста введи код: 111222)');
     }
 
     // Проверка 6-значного кода
@@ -98,31 +151,31 @@
         const code = document.getElementById('digit-code').value.trim();
 
         if (code === "111222") {
-            // Код верный! Сохраняем аккаунт навсегда, чтобы окно входа больше не появлялось
             const user = localStorage.getItem('temp_user');
             const role = localStorage.getItem('temp_role');
 
             localStorage.setItem('bropay_active_user', user);
             localStorage.setItem('bropay_active_role', role);
 
-            // Перекидываем в Главное меню
-            document.getElementById('user-name').innerText = user;
-            document.getElementById('user-role').innerText = role;
-            showScreen('menu-screen');
+            openMenu(user, role);
             alert('Вход выполнен успешно!');
         } else {
-            alert('Неверный код! Попробуйте еще раз или введите 111222.');
+            alert('Неверный код! Введите 111222.');
         }
     }
 
-    // Функция выхода (если захочешь зайти под другим именем)
+    function openMenu(user, role) {
+        document.getElementById('user-name').innerText = user;
+        document.getElementById('user-role').innerText = role;
+        showScreen('menu-screen');
+    }
+
     function logOut() {
         localStorage.removeItem('bropay_active_user');
         localStorage.removeItem('bropay_active_role');
         showScreen('auth-screen');
     }
 
-    // Переключатель окон
     function showScreen(screenId) {
         document.getElementById('auth-screen').style.display = 'none';
         document.getElementById('code-screen').style.display = 'none';
