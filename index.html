@@ -17,7 +17,7 @@
         .toggle-link:hover { color: #ffffff; }
 
         /* СТИЛЬ НИЖНЕГО ПАНЕЛИ PLAYEROK */
-        .nav-bar { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: #111111; border-top: 1px solid #333333; display: flex; justify-content: space-around; padding: 12px 0; z-index: 100; }
+        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #111111; border-top: 1px solid #333333; display: flex; justify-content: space-around; padding: 12px 0; z-index: 100; }
         .nav-item { color: #aaaaaa; text-align: center; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; text-decoration: none; flex: 1; font-weight: bold; }
         .nav-item.active { color: #ffffff; }
         .nav-icon { font-size: 20px; display: block; margin-bottom: 4px; }
@@ -52,10 +52,10 @@
         <button class="btn" onclick="checkDigitCode()">Подтвердить</button>
     </div>
 
-    <!-- ГЛАВНОЕ МЕНЮ В СТИЛЕ PLAYEROK (ЭКРАНЫ СТРАНИЦ) -->
+    <!-- ГЛАВНОЕ МЕНЮ В СТИЛЕ PLAYEROK -->
     <div class="menu-page" id="page-search">
         <h1>Поиск</h1>
-        <input type="text" placeholder="Поиск игр и товаров..." style="margin-bottom: 20px;">
+        <input type="text" placeholder="Поиск игр..." style="margin-bottom: 20px;">
         <div class="placeholder-box">Здесь будет глобальный поиск по биржам bropay</div>
     </div>
 
@@ -83,9 +83,9 @@
         </div>
     </div>
 
-    <!-- НИЖНИЙ НАВ-БАР (КНОПКИ PLAYEROK) -->
+    <!-- НИЖНИЙ НАВ-БАР -->
     <div class="nav-bar" id="playerok-nav" style="display: none;">
-        <div class="nav-item active" id="btn-search" onclick="changeTab('search')"><span class="nav-icon">🔍</span>Поиск</div>
+        <div class="nav-item" id="btn-search" onclick="changeTab('search')"><span class="nav-icon">🔍</span>Поиск</div>
         <div class="nav-item" id="btn-market" onclick="changeTab('market')"><span class="nav-icon">🛒</span>Маркет</div>
         <div class="nav-item" id="btn-sell" onclick="changeTab('sell')"><span class="nav-icon">➕</span>Продать</div>
         <div class="nav-item" id="btn-chats" onclick="changeTab('chats')"><span class="nav-icon">💬</span>Чаты</div>
@@ -141,7 +141,7 @@
             document.getElementById('show-email').innerText = email;
             hideAll();
             document.getElementById('code-screen').style.display = 'block';
-            alert('Код: 111222');
+            alert('Код для проверки: 111222');
         } else {
             if (!email || !pass) { alert('Введите данные!'); return; }
             const correctPass = localStorage.getItem('saved_pass_' + email);
@@ -152,7 +152,7 @@
                 localStorage.setItem('bropay_active_role', role);
                 loginSuccess(user, role);
             } else {
-                alert('Неверные данные!');
+                alert('Неверные данные или аккаунт не существует!');
             }
         }
     }
@@ -174,13 +174,14 @@
         document.getElementById('user-role').innerText = role;
         
         hideAll();
-        document.getElementById('playerok-nav').style.style = 'flex'; // Показываем нижний бар
         document.getElementById('playerok-nav').style.display = 'flex';
-        changeTab('profile'); // По умолчанию открываем вкладку профиля
+        changeTab('profile'); // Открываем профиль при входе
     }
 
     function changeTab(tabName) {
-        // Прячем все вкладки меню
         document.getElementById('page-search').style.display = 'none';
         document.getElementById('page-market').style.display = 'none';
         document.getElementById('page-sell').style.display = 'none';
+        document.getElementById('page-chats').style.display = 'none';
+        document.getElementById('page-profile').style.display = 'none';
+
